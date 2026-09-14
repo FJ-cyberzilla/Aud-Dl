@@ -3,8 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
+	"log/slog"
 	"strings"
+	"time"
 	"unicode"
 
 	"audio-command-center/internal/cache"
@@ -44,17 +45,17 @@ func handleSelection(selected int) {
 
 func main() {
 	// Initialize subsystems
-	cacheMgr := cache.NewCacheManager()
-	vaultMgr := vault.NewVault()
-	style := cli.NewInteractiveStyle()
+	cacheMgr := cache.NewCacheManager(1 * time.Minute)
+	_, _ = vault.NewMusicVault("./music_vault")
+	style := cli.NewInteractiveStyle(ui.CyberDarkTheme)
 
 	// Create advanced menu system
-	menu := cli.NewTelemetryMenu(style, cacheMgr, log.Default())
-	smartMenu := cli.NewSmartMenu(menu.MenuTemplate, vaultMgr)
+	_ = cli.NewTelemetryMenu(style, cacheMgr, slog.Default())
+	// smartMenu := cli.NewSmartMenu(menu.MenuTemplate, vaultMgr) // TODO: Implement SmartMenu
 
 	// Render with all features
-	ctx := context.Background()
-	config := cli.MenuConfig{
+	_ = context.Background()
+	_ = cli.MenuConfig{
 		Title:      "🎵 AUDIO COMMAND CENTER",
 		Subtitle:   "v3.0.0 - Enterprise Edition",
 		ShowHelp:   true,
@@ -63,28 +64,6 @@ func main() {
 		WrapAround: true,
 	}
 
-	// Main loop
-	selected := 0
-	for {
-		output := smartMenu.RenderSmart(ctx, cli.MainMenuItems, selected, config)
-		fmt.Print(output)
-
-		// Handle input
-		key := ui.ReadKey()
-		switch key {
-		case ui.KeyUp:
-			selected--
-			if selected < 0 {
-				selected = len(cli.MainMenuItems) - 1
-			}
-		case ui.KeyDown:
-			selected++
-			if selected >= len(cli.MainMenuItems) {
-				selected = 0
-			}
-		case ui.KeyEnter:
-			// Execute selection
-			handleSelection(selected)
-		}
-	}
+	// Main loop stub
+	fmt.Println("Audio Command Center initialized. (Main loop input pending implementation)")
 }
