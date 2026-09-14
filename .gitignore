@@ -39,8 +39,9 @@ go.work.sum
 .Trashes
 ehthumbs.db
 Thumbs.db
-
+.gemini/
 # Build output
 /bin/
 /dist/
 /build/
+

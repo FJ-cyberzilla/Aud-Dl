@@ -1,0 +1,92 @@
+
+golangci-lint run complexity.go
+
+# Run with all files
+golangci-lint run ./...
+
+# If you want to see complexity metrics only
+golangci-lint run --enable gocyclo,gocognit ./...
+ERRO [linters_context] typechecking error: stat /data/data/com.termux/files/home/Aud-Dl/complexity.go: directory not found
+main.go:1: : # audio-command-center
+./main.go:47:14: not enough arguments in call to cache.NewCacheManager
+        have ()
+        want ("time".Duration)
+./main.go:48:20: undefined: vault.NewVault
+./main.go:49:11: not enough arguments in call to cli.NewInteractiveStyle
+        have ()
+        want (ui.Theme)
+./main.go:52:48: cannot use log.Default() (value of type *log.Logger) as *slog.Logger value in argument to cli.NewTelemetryMenu
+./main.go:73:13: undefined: ui.ReadKey
+./main.go:75:11: undefined: ui.KeyUp
+./main.go:80:11: undefined: ui.KeyDown
+./main.go:85:11: undefined: ui.KeyEnter (typecheck)
+package main
+internal/cache/cache.go:1: : # audio-command-center/internal/cache [audio-command-center/internal/cache.test]
+internal/cache/cache_test.go:25:7: undefined: NewCache
+internal/cache/cache_test.go:39:7: undefined: NewCache (typecheck)
+package cache
+internal/gate/hub_sanitizer.go:8:2: could not import unicode (-: could not load export data: internal error in importing "unicode" (cannot decode "unicode", export data version 4 is greater than maximum supported version 2); please report an issue) (typecheck)
+        "unicode"
+        ^
+internal/gate/egress_tls_test.go:8:2: could not import sync/atomic (-: could not load export data: internal error in importing "sync/atomic" (cannot decode "sync/atomic", export data version 4 is greater than maximum supported version 2); please report an issue) (typecheck)
+        "sync/atomic"
+        ^
+internal/processor/elite_tagger.go:26:14: undefined: id3v2 (typecheck)
+        tag, err := id3v2.Open(filePath, id3v2.Options{Parse: true})
+                    ^
+internal/processor/elite_tagger.go:41:47: undefined: id3v2 (typecheck)
+        tag.AddTextFrame(tag.CommonID("Encoded by"), id3v2.EncodingUTF8, payload.AppName)
+                                                     ^
+internal/processor/elite_tagger.go:42:46: undefined: id3v2 (typecheck)
+        tag.AddTextFrame(tag.CommonID("Publisher"), id3v2.EncodingUTF8, payload.AppName)
+                                                    ^
+internal/search/draft_buffer.go:1: : # audio-command-center/internal/search [audio-command-center/internal/search.test]
+internal/search/search_manager_test.go:20:30: undefined: time (typecheck)
+package search
+internal/vault/duplicate_detector.go:7:2: could not import math/bits (-: could not load export data: internal error in importing "math/bits" (cannot decode "math/bits", export data version 4 is greater than maximum supported version 2); please report an issue) (typecheck)
+        "math/bits"
+        ^
+internal/vault/vault_resolver.go:7:2: could not import unicode (-: could not load export data: internal error in importing "unicode" (cannot decode "unicode", export data version 4 is greater than maximum supported version 2); please report an issue) (typecheck)
+        "unicode"
+        ^
+main.go:1: : # audio-command-center
+./main.go:47:14: not enough arguments in call to cache.NewCacheManager
+        have ()
+        want ("time".Duration)
+./main.go:48:20: undefined: vault.NewVault
+./main.go:49:11: not enough arguments in call to cli.NewInteractiveStyle
+        have ()
+        want (ui.Theme)
+./main.go:52:48: cannot use log.Default() (value of type *log.Logger) as *slog.Logger value in argument to cli.NewTelemetryMenu
+./main.go:73:13: undefined: ui.ReadKey
+./main.go:75:11: undefined: ui.KeyUp
+./main.go:80:11: undefined: ui.KeyDown
+./main.go:85:11: undefined: ui.KeyEnter (typecheck)
+package main
+internal/cache/cache.go:1: : # audio-command-center/internal/cache [audio-command-center/internal/cache.test]
+internal/cache/cache_test.go:25:7: undefined: NewCache
+internal/cache/cache_test.go:39:7: undefined: NewCache (typecheck)
+package cache
+internal/gate/hub_sanitizer.go:8:2: could not import unicode (-: could not load export data: internal error in importing "unicode" (cannot decode "unicode", export data version 4 is greater than maximum supported version 2); please report an issue) (typecheck)
+        "unicode"
+        ^
+internal/gate/egress_tls_test.go:8:2: could not import sync/atomic (-: could not load export data: internal error in importing "sync/atomic" (cannot decode "sync/atomic", export data version 4 is greater than maximum supported version 2); please report an issue) (typecheck)
+        "sync/atomic"
+        ^
+internal/processor/elite_tagger.go:26:14: undefined: id3v2 (typecheck)
+        tag, err := id3v2.Open(filePath, id3v2.Options{Parse: true})
+                    ^
+internal/processor/elite_tagger.go:41:47: undefined: id3v2 (typecheck)
+        tag.AddTextFrame(tag.CommonID("Encoded by"), id3v2.EncodingUTF8, payload.AppName)
+                                                     ^
+internal/processor/elite_tagger.go:42:46: undefined: id3v2 (typecheck)
+        tag.AddTextFrame(tag.CommonID("Publisher"), id3v2.EncodingUTF8, payload.AppName)
+                                                    ^
+internal/search/draft_buffer.go:1: : # audio-command-center/internal/search [audio-command-center/internal/search.test]
+internal/search/search_manager_test.go:20:30: undefined: time (typecheck)
+package search
+internal/vault/duplicate_detector.go:7:2: could not import math/bits (-: could not load export data: internal error in importing "math/bits" (cannot decode "math/bits", export data version 4 is greater than maximum supported version 2); please report an issue) (typecheck)
+        "math/bits"
+        ^
+internal/vault/vault_resolver.go:7:2: could not import unicode (-: could not load export data: internal error in importing "unicode" (cannot decode "unicode", export data version 4 is greater than maximum supported version 2); please report an issue) (typecheck)
+        "unicode"
