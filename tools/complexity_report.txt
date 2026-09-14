@@ -1,0 +1,6 @@
+=== Complexity Report ===
+File: complexity.go | Func: analyzeFile | Cyclomatic: 3 | Cognitive: 1
+File: complexity.go | Func: calculateCyclomatic | Cyclomatic: 2 | Cognitive: 0
+File: complexity.go | Func: calculateCognitive | Cyclomatic: 1 | Cognitive: 0
+File: complexity.go | Func: computeComplexity | Cyclomatic: 6 | Cognitive: 2
+File: complexity.go | Func: main | Cyclomatic: 3 | Cognitive: 2

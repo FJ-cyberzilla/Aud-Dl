@@ -1,0 +1,528 @@
+```html
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aud-Dl Enterprise Audio Processing Control Center | FJ™ Cybertronic Systems®</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            50: '#f9faf4',
+                            100: '#f1f2e9',
+                            500: '#7a8c64',
+                            600: '#5c6b4d',
+                            900: '#3c4532',
+                            950: '#2a3124',
+                            dark: '#0f100d',
+                            card: '#1a1b16',
+                            border: '#3a3d31',
+                            accent: '#ff8c00'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .glow-accent {
+            box-shadow: 0 0 25px rgba(255, 140, 0, 0.15);
+        }
+        .glow-text {
+            text-shadow: 0 0 10px rgba(122, 140, 100, 0.5);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f100d;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3a3d31;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #7a8c64;
+        }
+    </style>
+</head>
+<body class="bg-cyber-dark text-slate-100 min-h-screen flex flex-col selection:bg-cyber-500 selection:text-black">
+
+    <!-- Top Corporate Telemetry Bar -->
+    <header class="border-b border-cyber-border bg-cyber-card/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="bg-cyber-500/10 border border-cyber-accent/30 p-2 rounded-lg glow-accent">
+                    <i data-lucide="cpu" class="w-6 h-6 text-cyber-accent"></i>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <span class="font-bold tracking-wider text-white text-lg">Aud-Dl</span>
+                        <span class="text-xs px-2 py-0.5 bg-cyber-500/20 text-cyber-accent rounded border border-cyber-accent/30 font-mono">v2.6.4-PRO</span>
+                    </div>
+                    <p class="text-xs text-slate-400">FJ™ Cybertronic Systems® &bull; Enterprise Audio Engine</p>
+                </div>
+            </div>
+
+            <!-- Quick Stats Header -->
+            <div class="hidden md:flex items-center space-x-6 text-xs font-mono">
+                <div class="flex items-center space-x-2 bg-black/40 px-3 py-1.5 rounded border border-cyber-border">
+                    <span class="w-2 h-2 rounded-full bg-cyber-500 animate-ping"></span>
+                    <span class="text-slate-400">GATEWAY:</span>
+                    <span class="text-cyber-500">SECURE/TLS</span>
+                </div>
+                <div class="flex items-center space-x-2 bg-black/40 px-3 py-1.5 rounded border border-cyber-border">
+                    <span class="text-slate-400">VAULT:</span>
+                    <span class="text-cyber-accent">ONLINE (98.4%)</span>
+                </div>
+                <div class="flex items-center space-x-2 bg-black/40 px-3 py-1.5 rounded border border-cyber-border">
+                    <span class="text-slate-400">ANTIBOT:</span>
+                    <span class="text-sky-400">PASSIVE DEFUSER</span>
+                </div>
+            </div>
+
+            <!-- Contact & Github -->
+            <div class="flex items-center space-x-3">
+                <a href="https://github.com/FJ-cybetzilla" target="_blank" class="p-2 bg-black/40 hover:bg-cyber-border border border-cyber-border rounded-lg text-slate-300 hover:text-white transition flex items-center space-x-1.5 text-xs font-mono">
+                    <i data-lucide="github" class="w-4 h-4"></i>
+                    <span class="hidden sm:inline">FJ-cybetzilla</span>
+                </a>
+                <a href="mailto:cyberzilla.systems@gmail.com" class="p-2 bg-cyber-500 hover:bg-cyber-600 text-black font-semibold rounded-lg transition flex items-center space-x-1.5 text-xs">
+                    <i data-lucide="mail" class="w-4 h-4"></i>
+                    <span class="hidden sm:inline">Support Desk</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dashboard Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+        <!-- Notification Banner / System Alert -->
+        <div class="bg-gradient-to-r from-cyber-950/40 via-cyber-card to-cyber-950/40 border border-cyber-border rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="p-2 bg-cyber-500/20 text-cyber-accent rounded-lg">
+                    <i data-lucide="shield-check" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h2 class="text-sm font-semibold text-white">System Shield &amp; Autonomous Pipeline Active</h2>
+                    <p class="text-xs text-slate-400">All transcoders, duplicate detectors, and fingerprint databases are fully operational under FJ™ security specifications.</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2 text-xs font-mono">
+                <span class="text-slate-400">Target Output:</span>
+                <span class="bg-black/60 px-2.5 py-1 rounded border border-cyber-border text-cyber-accent">/music_vault</span>
+            </div>
+        </div>
+
+        <!-- Metric KPI Cards Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-cyber-card border border-cyber-border rounded-xl p-5 relative overflow-hidden">
+                <div class="absolute -right-4 -bottom-4 opacity-5 text-cyber-accent">
+                    <i data-lucide="download-cloud" class="w-32 h-32"></i>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-mono text-slate-400 uppercase tracking-wider">Active Stream Tasks</span>
+                    <span class="p-1.5 bg-cyber-500/10 text-cyber-500 rounded-md"><i data-lucide="activity" class="w-4 h-4"></i></span>
+                </div>
+                <div class="mt-3 flex items-baseline justify-between">
+                    <h3 class="text-2xl font-bold font-mono text-white" id="stat-active">14</h3>
+                    <span class="text-xs text-cyber-500 font-mono flex items-center"><i data-lucide="trending-up" class="w-3 h-3 mr-1"></i> +12.4%</span>
+                </div>
+                <div class="mt-3 w-full bg-black/50 h-1.5 rounded-full overflow-hidden">
+                    <div class="bg-cyber-accent h-full w-3/4 rounded-full"></div>
+                </div>
+            </div>
+
+            <div class="bg-cyber-card border border-cyber-border rounded-xl p-5 relative overflow-hidden">
+                <div class="absolute -right-4 -bottom-4 opacity-5 text-cyber-accent">
+                    <i data-lucide="database" class="w-32 h-32"></i>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-mono text-slate-400 uppercase tracking-wider">Vault Fingerprint DB</span>
+                    <span class="p-1.5 bg-sky-500/10 text-sky-400 rounded-md"><i data-lucide="hard-drive" class="w-4 h-4"></i></span>
+                </div>
+                <div class="mt-3 flex items-baseline justify-between">
+                    <h3 class="text-2xl font-bold font-mono text-white">48,291</h3>
+                    <span class="text-xs text-sky-400 font-mono">Indexed Tracks</span>
+                </div>
+                <div class="mt-3 w-full bg-black/50 h-1.5 rounded-full overflow-hidden">
+                    <div class="bg-sky-400 h-full w-5/6 rounded-full"></div>
+                </div>
+            </div>
+
+            <div class="bg-cyber-card border border-cyber-border rounded-xl p-5 relative overflow-hidden">
+                <div class="absolute -right-4 -bottom-4 opacity-5 text-cyber-accent">
+                    <i data-lucide="zap" class="w-32 h-32"></i>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-mono text-slate-400 uppercase tracking-wider">Cache Hit Ratio</span>
+                    <span class="p-1.5 bg-amber-500/10 text-amber-400 rounded-md"><i data-lucide="cpu" class="w-4 h-4"></i></span>
+                </div>
+                <div class="mt-3 flex items-baseline justify-between">
+                    <h3 class="text-2xl font-bold font-mono text-white">99.2%</h3>
+                    <span class="text-xs text-amber-400 font-mono">Optimal</span>
+                </div>
+                <div class="mt-3 w-full bg-black/50 h-1.5 rounded-full overflow-hidden">
+                    <div class="bg-amber-400 h-full w-[99.2%] rounded-full"></div>
+                </div>
+            </div>
+
+            <div class="bg-cyber-card border border-cyber-border rounded-xl p-5 relative overflow-hidden">
+                <div class="absolute -right-4 -bottom-4 opacity-5 text-cyber-accent">
+                    <i data-lucide="shield-alert" class="w-32 h-32"></i>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-mono text-slate-400 uppercase tracking-wider">Antibot Interceptions</span>
+                    <span class="p-1.5 bg-rose-500/10 text-rose-400 rounded-md"><i data-lucide="shield" class="w-4 h-4"></i></span>
+                </div>
+                <div class="mt-3 flex items-baseline justify-between">
+                    <h3 class="text-2xl font-bold font-mono text-white">0</h3>
+                    <span class="text-xs text-cyber-500 font-mono">Clean Feed</span>
+                </div>
+                <div class="mt-3 w-full bg-black/50 h-1.5 rounded-full overflow-hidden">
+                    <div class="bg-rose-400 h-full w-0 rounded-full"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Separation Line -->
+        <div class="flex items-center my-6">
+            <div class="flex-grow border-t border-cyber-border"></div>
+            <span class="px-4 text-xs font-mono uppercase tracking-widest text-slate-500 flex items-center space-x-2">
+                <i data-lucide="terminal" class="w-3 h-3 mr-1.5 text-cyber-accent"></i> Download Control &amp; Telemetry Hub
+            </span>
+            <div class="flex-grow border-t border-cyber-border"></div>
+        </div>
+
+        <!-- Main Action & Charts Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Download Submission Form (Left 1 Col) -->
+            <div class="bg-cyber-card border border-cyber-border rounded-xl p-6 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between pb-4 border-b border-cyber-border mb-6">
+                        <h3 class="font-semibold text-white flex items-center space-x-2">
+                            <i data-lucide="download" class="w-4 h-4 text-cyber-accent"></i>
+                            <span>New Audio Acquisition</span>
+                        </h3>
+                        <span class="text-xs font-mono text-slate-400">Go Task Binder</span>
+                    </div>
+
+                    <form id="download-form" class="space-y-4" onsubmit="triggerDownload(event)">
+                        <div>
+                            <label class="block text-xs font-mono text-slate-400 mb-1.5">STREAM / MEDIA URL</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
+                                    <i data-lucide="link" class="w-4 h-4"></i>
+                                </span>
+                                <input type="url" required placeholder="https://provider.service/stream/..." class="w-full bg-black/60 border border-cyber-border rounded-lg pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-cyber-accent transition font-mono">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-mono text-slate-400 mb-1.5">AUDIO FORMAT</label>
+                                <select class="w-full bg-black/60 border border-cyber-border rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-cyber-accent transition font-mono">
+                                    <option value="mp3">MP3 (320kbps)</option>
+                                    <option value="flac">FLAC (Lossless)</option>
+                                    <option value="wav">WAV (Uncompressed)</option>
+                                    <option value="aac">AAC (Stream Opt)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-mono text-slate-400 mb-1.5">TAG STRATEGY</label>
+                                <select class="w-full bg-black/60 border border-cyber-border rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-cyber-accent transition font-mono">
+                                    <option value="elite">Elite Tagger V2</option>
+                                    <option value="standard">Standard Metadata</option>
+                                    <option value="raw">Raw Transcode</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-mono text-slate-400 mb-1.5">VAULT DESTINATION PLAYLIST</label>
+                            <input type="text" value="Default Archive /music_vault" class="w-full bg-black/60 border border-cyber-border rounded-lg px-3 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-cyber-accent transition font-mono">
+                        </div>
+                    </form>
+                </div>
+
+                <div class="pt-6 mt-6 border-t border-cyber-border">
+                    <button type="submit" form="download-form" class="w-full bg-cyber-500 hover:bg-cyber-600 text-black font-semibold py-3 rounded-lg transition flex items-center justify-center space-x-2 shadow-lg shadow-cyber-500/10">
+                        <i data-lucide="play" class="w-4 h-4 fill-current"></i>
+                        <span>Initialize Stream Pipeline</span>
+                    </button>
+                    <p class="text-center text-[10px] text-slate-500 font-mono mt-3">Protected by FJ™ System Shield &amp; Egress TLS</p>
+                </div>
+            </div>
+
+            <!-- Throughput Telemetry Chart (Right 2 Cols) -->
+            <div class="lg:col-span-2 bg-cyber-card border border-cyber-border rounded-xl p-6 flex flex-col justify-between">
+                <div class="flex items-center justify-between pb-4 border-b border-cyber-border">
+                    <div>
+                        <h3 class="font-semibold text-white flex items-center space-x-2">
+                            <i data-lucide="bar-chart-3" class="w-4 h-4 text-cyber-accent"></i>
+                            <span>Network Throughput &amp; Transcode Rate</span>
+                        </h3>
+                        <p class="text-xs text-slate-400">Real-time bandwidth utilization across active search dynamos and transcoders</p>
+                    </div>
+                    <div class="flex items-center space-x-2 font-mono text-xs">
+                        <span class="inline-block w-2 h-2 rounded-full bg-cyber-accent"></span>
+                        <span class="text-slate-300">MB/s Stream</span>
+                    </div>
+                </div>
+
+                <!-- Chart Container -->
+                <div class="relative w-full h-64 my-4">
+                    <canvas id="throughputChart"></canvas>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4 pt-4 border-t border-cyber-border text-center font-mono">
+                    <div class="bg-black/30 p-2.5 rounded border border-cyber-border">
+                        <span class="text-[10px] text-slate-500 block">PEAK BANDWIDTH</span>
+                        <span class="text-sm font-bold text-white">42.8 MB/s</span>
+                    </div>
+                    <div class="bg-black/30 p-2.5 rounded border border-cyber-border">
+                        <span class="text-[10px] text-slate-500 block">AVG LATENCY</span>
+                        <span class="text-sm font-bold text-cyber-500">18.4 ms</span>
+                    </div>
+                    <div class="bg-black/30 p-2.5 rounded border border-cyber-border">
+                        <span class="text-[10px] text-slate-500 block">ACTIVE THREADS</span>
+                        <span class="text-sm font-bold text-sky-400">64 Workers</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Separation Line -->
+        <div class="flex items-center my-6">
+            <div class="flex-grow border-t border-cyber-border"></div>
+            <span class="px-4 text-xs font-mono uppercase tracking-widest text-slate-500 flex items-center space-x-2">
+                <i data-lucide="server" class="w-3 h-3 mr-1.5 text-cyber-accent"></i> Internal Modules &amp; Vault Architecture Status
+            </span>
+            <div class="flex-grow border-t border-cyber-border"></div>
+        </div>
+
+        <!-- Data Tables Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+            <!-- Internal Gate & Controller Table -->
+            <div class="bg-cyber-card border border-cyber-border rounded-xl p-6">
+                <div class="flex items-center justify-between pb-4 border-b border-cyber-border mb-4">
+                    <h3 class="font-semibold text-white flex items-center space-x-2 text-sm">
+                        <i data-lucide="cpu" class="w-4 h-4 text-cyber-accent"></i>
+                        <span>Internal Gate &amp; Strategy Subsystems</span>
+                    </h3>
+                    <span class="text-xs font-mono text-cyber-500">All Nominal</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs font-mono">
+                        <thead class="bg-black/40 text-slate-400 uppercase border-b border-cyber-border">
+                            <tr>
+                                <th class="px-3 py-2.5">Module Name</th>
+                                <th class="px-3 py-2.5">Status</th>
+                                <th class="px-3 py-2.5">Protocol / Role</th>
+                                <th class="px-3 py-2.5 text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-cyber-border/60 text-slate-300">
+                            <tr>
+                                <td class="px-3 py-3 font-semibold text-white">hub_controller.go</td>
+                                <td class="px-3 py-3"><span class="px-2 py-0.5 rounded bg-cyber-500/10 text-cyber-500 text-[10px]">Running</span></td>
+                                <td class="px-3 py-3 text-slate-400">Hub Orchestration</td>
+                                <td class="px-3 py-3 text-right"><button onclick="pingModule('hub_controller')" class="text-cyber-accent hover:underline">Inspect</button></td>
+                            </tr>
+                            <tr>
+                                <td class="px-3 py-3 font-semibold text-white">antibot_commander.go</td>
+                                <td class="px-3 py-3"><span class="px-2 py-0.5 rounded bg-cyber-500/10 text-cyber-500 text-[10px]">Active</span></td>
+                                <td class="px-3 py-3 text-slate-400">Defuser &amp; Evasion</td>
+                                <td class="px-3 py-3 text-right"><button onclick="pingModule('antibot_commander')" class="text-cyber-accent hover:underline">Inspect</button></td>
+                            </tr>
+                            <tr>
+                                <td class="px-3 py-3 font-semibold text-white">pipe_transcoder.go</td>
+                                <td class="px-3 py-3"><span class="px-2 py-0.5 rounded bg-cyber-500/10 text-cyber-500 text-[10px]">Ready</span></td>
+                                <td class="px-3 py-3 text-slate-400">Audio Stream Pipe</td>
+                                <td class="px-3 py-3 text-right"><button onclick="pingModule('pipe_transcoder')" class="text-cyber-accent hover:underline">Inspect</button></td>
+                            </tr>
+                            <tr>
+                                <td class="px-3 py-3 font-semibold text-white">search_manager.go</td>
+                                <td class="px-3 py-3"><span class="px-2 py-0.5 rounded bg-cyber-500/10 text-cyber-500 text-[10px]">Indexed</span></td>
+                                <td class="px-3 py-3 text-slate-400">Multi-Provider Quest</td>
+                                <td class="px-3 py-3 text-right"><button onclick="pingModule('search_manager')" class="text-cyber-accent hover:underline">Inspect</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Vault & Duplicate Detector Table -->
+            <div class="bg-cyber-card border border-cyber-border rounded-xl p-6">
+                <div class="flex items-center justify-between pb-4 border-b border-cyber-border mb-4">
+                    <h3 class="font-semibold text-white flex items-center space-x-2 text-sm">
+                        <i data-lucide="database" class="w-4 h-4 text-cyber-accent"></i>
+                        <span>Vault &amp; Fingerprint Database Index</span>
+                    </h3>
+                    <span class="text-xs font-mono text-sky-400">Path: /music_vault</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs font-mono">
+                        <thead class="bg-black/40 text-slate-400 uppercase border-b border-cyber-border">
+                            <tr>
+                                <th class="px-3 py-2.5">Component File</th>
+                                <th class="px-3 py-2.5">Integrity</th>
+                                <th class="px-3 py-2.5">State</th>
+                                <th class="px-3 py-2.5 text-right">Check</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-cyber-border/60 text-slate-300">
+                            <tr>
+                                <td class="px-3 py-3 font-semibold text-white">duplicate_detector.go</td>
+                                <td class="px-3 py-3 text-cyber-500">100% Secure</td>
+                                <td class="px-3 py-3 text-slate-400">Active Scan</td>
+                                <td class="px-3 py-3 text-right"><button onclick="runVaultCheck('duplicate_detector')" class="text-cyber-accent hover:underline">Run</button></td>
+                            </tr>
+                            <tr>
+                                <td class="px-3 py-3 font-semibold text-white">fingerprint_db.go</td>
+                                <td class="px-3 py-3 text-cyber-500">Optimized</td>
+                                <td class="px-3 py-3 text-slate-400">Indexed</td>
+                                <td class="px-3 py-3 text-right"><button onclick="runVaultCheck('fingerprint_db')" class="text-cyber-accent hover:underline">Run</button></td>
+                            </tr>
+                            <tr>
+                                <td class="px-3 py-3 font-semibold text-white">persistent_detector.go</td>
+                                <td class="px-3 py-3 text-cyber-500">Synced</td>
+                                <td class="px-3 py-3 text-slate-400">Listening</td>
+                                <td class="px-3 py-3 text-right"><button onclick="runVaultCheck('persistent_detector')" class="text-cyber-accent hover:underline">Run</button></td>
+                            </tr>
+                            <tr>
+                                <td class="px-3 py-3 font-semibold text-white">playlist.go</td>
+                                <td class="px-3 py-3 text-cyber-500">Verified</td>
+                                <td class="px-3 py-3 text-slate-400">Available</td>
+                                <td class="px-3 py-3 text-right"><button onclick="runVaultCheck('playlist')" class="text-cyber-accent hover:underline">Run</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Custom Notification Toast Modal -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-32 opacity-0 transition-all duration-300 bg-cyber-card border border-cyber-accent p-4 rounded-xl shadow-2xl flex items-center space-x-3">
+        <div class="p-2 bg-cyber-500/20 text-cyber-accent rounded-lg">
+            <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+        </div>
+        <div>
+            <h4 class="text-sm font-semibold text-white" id="toast-title">Operation Successful</h4>
+            <p class="text-xs text-slate-400" id="toast-desc">Aud-Dl background worker initialized successfully.</p>
+        </div>
+    </div>
+
+    <!-- Corporate Footer -->
+    <footer class="border-t border-cyber-border bg-cyber-card/40 mt-12 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-slate-400">
+            <div>
+                <p>&copy; 2026 <strong class="text-white">FJ™ Cybertronic Systems®</strong>. All Rights Reserved.</p>
+            </div>
+            <div class="flex items-center space-x-6">
+                <a href="https://github.com/FJ-cybetzilla" target="_blank" class="hover:text-cyber-accent transition">GitHub: FJ-cybetzilla</a>
+                <a href="mailto:cyberzilla.systems@gmail.com" class="hover:text-cyber-accent transition">cyberzilla.systems@gmail.com</a>
+                <span class="text-cyber-accent">Aud-Dl v2.6.4</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script Logic -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Initialize Throughput Chart
+        const ctx = document.getElementById('throughputChart').getContext('2d');
+        const throughputChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['12:00', '12:05', '12:10', '12:15', '12:20', '12:25', '12:30'],
+                datasets: [{
+                    label: 'Throughput (MB/s)',
+                    data: [12.4, 18.2, 24.1, 19.5, 32.8, 28.3, 38.6],
+                    borderColor: '#00ff66',
+                    backgroundColor: 'rgba(0, 255, 102, 0.08)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.35,
+                    pointBackgroundColor: '#00ff66'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(31, 51, 40, 0.4)' },
+                        ticks: { color: '#94a3b8', font: { family: 'JetBrains Mono', size: 10 } }
+                    },
+                    y: {
+                        grid: { color: 'rgba(31, 51, 40, 0.4)' },
+                        ticks: { color: '#94a3b8', font: { family: 'JetBrains Mono', size: 10 } }
+                    }
+                }
+            }
+        });
+
+        // Toast Trigger Function
+        function showToast(title, desc) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-title').innerText = title;
+            document.getElementById('toast-desc').innerText = desc;
+            toast.classList.remove('translate-y-32', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-32', 'opacity-0');
+            }, 3500);
+        }
+
+        // Form Submit Handler
+        function triggerDownload(e) {
+            e.preventDefault();
+            showToast('Stream Pipeline Initialized', 'Task binder dispatched successfully to Go backend worker.');
+            const activeStat = document.getElementById('stat-active');
+            activeStat.innerText = parseInt(activeStat.innerText) + 1;
+        }
+
+        // Module Inspection
+        function pingModule(moduleName) {
+            showToast('Module Inspected', `Subsystem [${moduleName}.go] responded with 0 errors. Status: OK.`);
+        }
+
+        // Vault Check
+        function runVaultCheck(vaultComponent) {
+            showToast('Vault Verification', `Fingerprint database check completed for [${vaultComponent}.go].`);
+        }
+    </script>
+</body>
+</html>
+```

@@ -1,0 +1,112 @@
+apiVersion: cybertronic.systems/v1
+kind: ApplicationManifest
+metadata:
+  name: aud-dl
+  version: "2.6.4-PRO"
+  organization: "FJ™ Cybertronic Systems®"
+  repository: "https://github.com/FJ-cybetzilla"
+  support: "cyberzilla.systems@gmail.com"
+  description: "Enterprise MP3 and Audio File Downloader & Stream Management Engine"
+
+spec:
+  environment:
+    runtime: "go1.22+"
+    execution_mode: "production"
+    target_vault: "/music_vault"
+    config_path: "config/app_settings.json"
+
+  security:
+    system_shield: true
+    egress_tls: "strict"
+    antibot_defuser:
+      mode: "passive"
+      commander_module: "internal/strategy/antibot_commander.go"
+    gateway:
+      auth_required: true
+      protocol: "SECURE/TLS"
+
+  architecture:
+    cmd:
+      - path: "cmd/app/main.go"
+        role: "Primary application entrypoint & CLI bootstrap"
+    
+    internal_modules:
+      cache:
+        - file: "internal/cache/cache.go"
+          purpose: "In-memory caching mechanisms"
+        - file: "internal/cache/cache_manager.go"
+          purpose: "Cache lifecycle and eviction policy manager"
+      
+      cli:
+        - file: "internal/cli/interactive_menu.go"
+        - file: "internal/cli/interactive_style.go"
+        - file: "internal/cli/junction_renderer.go"
+        - file: "internal/cli/menu_crust.go"
+        - file: "internal/cli/menu_junction.go"
+        - file: "internal/cli/menu_template.go"
+        - file: "internal/cli/renderer_admin.go"
+        - file: "internal/cli/styling.go"
+      
+      config_subsystem:
+        - file: "internal/config/app_config.go"
+          role: "JSON settings parser and environment binder"
+      
+      gate:
+        - file: "internal/gate/hub_controller.go"
+          role: "Core orchestration hub"
+        - file: "internal/gate/hub_compiler.go"
+        - file: "internal/gate/hub_sanctioner.go"
+        - file: "internal/gate/hub_validator.go"
+        - file: "internal/gate/system_shield.go"
+      
+      processor:
+        - file: "internal/processor/elite_tagger.go"
+          role: "Advanced ID3v2/FLAC metadata embedding engine"
+        - file: "internal/processor/pipe_transcoder.go"
+          role: "Streaming audio transcode pipeline"
+        - file: "internal/processor/stream_resumer.go"
+      
+      search_dynamos:
+        - file: "internal/search/search_manager.go"
+          role: "Multi-provider search coordination"
+        - file: "internal/search/providers.go"
+      
+      strategy:
+        - file: "internal/strategy/antibot_commander.go"
+        - file: "internal/strategy/hybrid_decisive.go"
+        - file: "internal/strategy/limiter.go"
+      
+      task_engine:
+        - file: "internal/task/task_binder.go"
+          role: "Task concurrency and channel queue binder"
+        - file: "internal/task/task_controller.go"
+      
+      ui_terminal:
+        - file: "internal/ui/barchart.go"
+        - file: "internal/ui/table.go"
+        - file: "internal/ui/theme.go"
+      
+      vault:
+        - file: "internal/vault/vault.go"
+          role: "File archive controller mapping to /music_vault"
+        - file: "internal/vault/duplicate_detector.go"
+          role: "SHA-256 fingerprint duplicate scanner"
+        - file: "internal/vault/fingerprint_db.go"
+          role: "Indexed track fingerprint repository"
+        - file: "internal/vault/playlist.go"
+
+  resources:
+    limits:
+      cpu: "4000m"
+      memory: "8Gi"
+    storage:
+      mount_path: "/music_vault"
+      persistence: true
+      duplicate_detection: "active"
+
+  telemetry:
+    metrics_endpoint: "/metrics"
+    log_level: "info"
+    analytics:
+      throughput_monitoring: true
+      active_workers_limit: 64

@@ -1,0 +1,7 @@
+{
+  "vault_directory": "music_vault/",
+  "max_concurrency": 4,
+  "default_theme": "cyber_dark",
+  "request_timeout_seconds": 30,
+  "auto_update_check": true
+}

@@ -1,0 +1,123 @@
+linters:
+  enable:
+    - gocyclo
+    - gocognit
+    - gosec
+    - govet
+    - staticcheck
+    - errcheck
+    - unused
+    - ineffassign
+    - revive
+    - stylecheck
+    - unconvert
+    - unparam
+    - funlen           # Function length
+    - goconst          # Magic strings
+    - gofmt            # Formatting
+    - misspell         # Typos
+    - nilnil           # nil/nil returns
+    - prealloc         # Slice preallocation suggestions
+
+linters-settings:
+  gocyclo:
+    min-complexity: 10
+  gocognit:
+    min-complexity: 15
+  gosec:
+    excludes:
+      - G104
+  govet:
+    enable-all: true
+  funlen:
+    lines: 60
+    statements: 40
+  goconst:
+    min-len: 3
+    min-occurrences: 3
+  gofmt:
+    simplify: true
+  misspell:
+    locale: US
+  revive:
+    severity: warning
+    rules:
+      # ... your existing rules ...
+      - name: exported
+      - name: blank-imports
+      - name: context-as-argument
+      - name: error-return
+      - name: error-strings
+      - name: error-naming
+      - name: if-return
+      - name: increment-decrement
+      - name: var-naming
+      - name: var-declaration
+      - name: package-comments
+      - name: range
+      - name: receiver-naming
+      - name: time-naming
+      - name: unexported-return
+      - name: indent-error-flow
+      - name: errorf
+      - name: empty-block
+      - name: superfluous-else
+      - name: unreachable-code
+      - name: redefines-builtin-id
+      - name: bool-literal-in-expr  # Add this
+      - name: early-return          # Add this
+
+issues:
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - gocyclo
+        - gocognit
+        - gosec
+        - unparam
+        - funlen
+    - path: internal/cli/.*_test\.go
+      linters:
+        - gocyclo
+        - gocognit
+    # Exclude specific complex files temporarily
+    - path: internal/cli/menu_template\.go
+      linters:
+        - gocyclo
+        - gocognit
+        - funlen
+    # Skip generated code
+    - path: /vendor/
+      linters:
+        - all
+    - path: /gen/
+      linters:
+        - all
+    # Skip mock files
+    - path: /mocks/
+      linters:
+        - all
+
+  max-issues-per-linter: 0
+  max-same-issues: 0
+
+output:
+  formats:
+    - format: colored-line-number
+  print-issued-lines: true
+  print-linter-name: true
+  uniq-by-line: false
+
+run:
+  timeout: 5m
+  tests: true
+  modules-download-mode: readonly
+  skip-dirs:
+    - vendor
+    - gen
+    - tmp
+    - mocks
+  skip-files:
+    - ".*\\.pb\\.go$"
+    - ".*\\.gen\\.go$"
+    - ".*\\.mock\\.go$"
