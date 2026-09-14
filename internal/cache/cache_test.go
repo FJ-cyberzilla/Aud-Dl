@@ -22,7 +22,7 @@ func TestCache_SetGet(t *testing.T) {
 }
 
 func TestCache_Expired(t *testing.T) {
-	c := NewCache()
+	c := NewCacheManager(1 * time.Second)
 	key := "expired"
 	
 	c.Set(key, "data", 10*time.Millisecond)
@@ -36,7 +36,7 @@ func TestCache_Expired(t *testing.T) {
 }
 
 func TestCache_Delete(t *testing.T) {
-	c := NewCache()
+	c := NewCacheManager(1 * time.Second)
 	key := "delete"
 	
 	c.Set(key, "data", 0)

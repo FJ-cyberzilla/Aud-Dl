@@ -27,7 +27,7 @@ func TestMenuTemplate_Render(t *testing.T) {
             items:    MainMenuItems,
             selected: 0,
             config:   MenuConfig{Title: "TEST MENU", ShowHelp: true},
-            contains: []string{"TEST MENU", "🔥", "Navigate"},
+            contains: []string{"TEST MENU", "🔥", "navigate"},
         },
         {
             name:     "handles invalid selection",
